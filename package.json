@@ -1,7 +1,7 @@
 {
   "name": "hantranslate.ai",
   "version": "0.1.0",
-  "description": "chrome-extension-typescript-starter",
+  "description": "Markup-safe, lightweight, fast AI Translator extension powered by Chrome’s built-in AI.",
   "main": "index.js",
   "scripts": {
     "watch": "webpack --config webpack/webpack.dev.js --watch",
@@ -11,10 +11,10 @@
     "style": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "author": "uwoobeat",
-  "license": "MIT",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chibat/chrome-extension-typescript-starter.git"
+    "url": "https://github.com/uwoobeat/hantranslate.ai.git"
   },
   "dependencies": {
     "react": "^18.2.0",
