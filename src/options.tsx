@@ -22,7 +22,7 @@ const Options = () => {
       (items) => {
         setColor(items.favoriteColor);
         setLike(items.likesColor);
-      }
+      },
     );
   }, []);
 
@@ -40,14 +40,15 @@ const Options = () => {
           setStatus("");
         }, 1000);
         return () => clearTimeout(id);
-      }
+      },
     );
   };
 
   return (
     <>
       <div>
-        Favorite color: <select
+        Favorite color:{" "}
+        <select
           value={color}
           onChange={(event) => setColor(event.target.value)}
         >
@@ -78,5 +79,5 @@ const root = createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
     <Options />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
