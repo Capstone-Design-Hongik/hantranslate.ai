@@ -30,6 +30,7 @@
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.1.0",
+    "shadcn": "^3.5.0",
     "ts-jest": "^29.4.5",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
