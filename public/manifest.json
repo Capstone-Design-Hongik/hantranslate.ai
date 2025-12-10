@@ -1,35 +1,26 @@
 {
   "manifest_version": 3,
 
-  "name": "hantranslate.ai",
-  "description": "Markup-safe, lightweight, fast AI Translator extension powered by Chrome's built-in AI.",
+  "name": "HanTranslate.ai",
+  "description": "Chrome Built-in AI를 활용한 한국어 번역",
   "version": "0.1.0",
 
-  "options_ui": {
-    "page": "options.html"
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
   },
 
-  "action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
   },
 
   "content_scripts": [
-      {
-          "matches": ["<all_urls>"],
-          "js": ["js/vendor.js", "js/content_script.js"]
-      }
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"]
+    }
   ],
 
-  "background": {
-    "service_worker": "js/background.js"
-  },
-
-  "permissions": [
-    "storage"
-  ],
-
-  "host_permissions": [
-    "<all_urls>"
-  ]
+  "permissions": ["activeTab"]
 }

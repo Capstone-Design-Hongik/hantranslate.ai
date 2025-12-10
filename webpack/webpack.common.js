@@ -5,10 +5,9 @@ const srcDir = path.join(__dirname, "..", "src");
 
 module.exports = {
     entry: {
-      popup: path.join(srcDir, 'popup.tsx'),
-      options: path.join(srcDir, 'options.tsx'),
-      background: path.join(srcDir, 'background.ts'),
-      content_script: path.join(srcDir, 'content_script.tsx'),
+      popup: path.join(srcDir, 'popup/index.tsx'),
+      background: path.join(srcDir, 'background/index.ts'),
+      content: path.join(srcDir, 'content/index.ts'),
     },
     output: {
         path: path.join(__dirname, "../dist/js"),
@@ -18,7 +17,8 @@ module.exports = {
         splitChunks: {
             name: "vendor",
             chunks(chunk) {
-              return chunk.name !== 'background';
+              // background와 content는 독립 실행되어야 함
+              return chunk.name !== 'background' && chunk.name !== 'content';
             }
         },
     },
