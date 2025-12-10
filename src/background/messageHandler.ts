@@ -46,17 +46,14 @@ async function handleTranslation(): Promise<BackgroundResponse> {
       return { type: "STATUS", status: "completed" }; // 이미 한국어
     }
 
-    // 3. 번역
-    const translations = await Promise.all(
-      textResponse.texts.map((text) => translate(text, detectedLang)),
-    );
-
-    // 4. DOM 교체
-    const replacements = translations.map((text, index) => ({ index, text }));
-    await chrome.tabs.sendMessage(tab.id, {
-      type: "REPLACE_TEXT",
-      replacements,
-    });
+    // 3. 번역 및 DOM 교체
+    for (let i = 0; i < textResponse.texts.length; i++) {
+      const translated = await translate(textResponse.texts[i], detectedLang);
+      await chrome.tabs.sendMessage(tab.id, {
+        type: "REPLACE_TEXT",
+        replacements: [{ index: i, text: translated }],
+      });
+    }
 
     return { type: "STATUS", status: "completed" };
   } catch (error) {
