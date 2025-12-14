@@ -1,4 +1,15 @@
 /**
+ * DOM에서 번역 대상 텍스트를 블록 단위로 추출하는 모듈.
+ *
+ * 핵심 설계:
+ * - 블록 요소(p, li, h1-h6 등) 단위로 추출하여 문장이 잘리는 문제 방지
+ * - 중첩된 블록이 있으면 가장 안쪽(leaf) 블록만 추출하여 중복 번역 방지
+ *   예: <blockquote><p>text</p></blockquote>에서 <blockquote>는 제외하고 <p>만 추출
+ *
+ * @module domExtractor
+ */
+
+/**
  * 번역 대상 블록 요소 선택자.
  * 텍스트 콘텐츠를 담는 블록 레벨 요소들을 대상으로 한다.
  */
@@ -54,23 +65,35 @@ function shouldSkip(element: Element): boolean {
 }
 
 /**
- * 블록 자손이 있는지 확인 (중복 추출 방지).
- * 예: `<blockquote><p>text</p></blockquote>`에서 `<p>`만 추출하고 `<blockquote>`는 건너뛴다.
+ * 다른 블록을 포함하는 블록(non-leaf) 집합을 찾는다.
+ * non-leaf 블록의 innerHTML은 자식 블록을 포함하므로 번역 시 중복이 발생한다.
  *
- * @param element - 검사할 요소
- * @param allBlocks - 모든 블록 요소 목록
- * @returns 이 요소가 다른 블록을 포함하면 true (가장 안쪽 블록만 추출하기 위해)
+ * querySelectorAll이 반환하는 NodeList는 DFS 전위 순회 순서로 정렬되어 있다.
+ * 이 특성을 이용하여 스택 기반으로 단일 순회만으로 부모-자식 관계를 파악한다.
+ *
+ * @param allBlocks - querySelectorAll로 추출한 블록 요소들 (문서 순서)
+ * @returns 다른 블록을 포함하는 블록 집합
  */
-function hasBlockDescendant(
-  element: Element,
-  allBlocks: NodeListOf<Element>,
-): boolean {
-  for (const block of allBlocks) {
-    if (block !== element && element.contains(block)) {
-      return true;
+function findNonLeafBlocks(allBlocks: NodeListOf<Element>): Set<Element> {
+  const nonLeafBlocks = new Set<Element>();
+  const stack: Element[] = [];
+
+  for (const el of allBlocks) {
+    // 스택 상단이 현재 요소를 포함하지 않으면 범위가 끝난 것이므로 pop
+    while (stack.length > 0 && !stack[stack.length - 1].contains(el)) {
+      stack.pop();
     }
+
+    // 스택에 남은 요소가 있으면 그 요소는 현재 요소의 조상 (non-leaf)
+    if (stack.length > 0) {
+      nonLeafBlocks.add(stack[stack.length - 1]);
+    }
+
+    // 현재 요소를 스택에 추가하여 자손 블록 탐지 대기
+    stack.push(el);
   }
-  return false;
+
+  return nonLeafBlocks;
 }
 
 /**
@@ -93,13 +116,16 @@ export function extractTextNodes(): string[] {
 
   const blocks = document.querySelectorAll(BLOCK_SELECTORS.join(", "));
 
+  // 다른 블록을 포함하는 블록(non-leaf)을 미리 계산
+  const nonLeafBlocks = findNonLeafBlocks(blocks);
+
   for (const block of blocks) {
     // 제외 대상 확인 (조상에 skip 요소가 있는지)
     if (shouldSkip(block)) continue;
 
-    // 중첩된 블록 제외 (예: <blockquote> 안의 <p>는 <p>만 처리)
-    // 자손 블록이 있으면 건너뛰어 가장 안쪽 블록만 추출
-    if (hasBlockDescendant(block, blocks)) continue;
+    // non-leaf 블록 제외: innerHTML에 자식 블록이 포함되어 중복 번역됨
+    // 예: <blockquote><p>text</p></blockquote>에서 <blockquote>는 제외
+    if (nonLeafBlocks.has(block)) continue;
 
     // 빈 텍스트 제외 (태그만 있는 경우도 체크)
     if (!block.textContent?.trim()) continue;
