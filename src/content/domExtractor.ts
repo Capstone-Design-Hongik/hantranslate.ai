@@ -48,7 +48,7 @@ const SKIP_SELECTORS = [
 
 /**
  * 추출된 블록 요소 참조를 저장하는 배열.
- * {@link extractTextNodes}에서 채워지며, {@link getExtractedBlocks}를 통해 접근한다.
+ * {@link extractTranslatableContents}에서 채워지며, {@link getExtractedBlocks}를 통해 접근한다.
  * 번역 후 DOM 교체 시 원본 요소 참조로 사용된다.
  */
 let extractedBlocks: Element[] = [];
@@ -110,7 +110,7 @@ function findNonLeafBlocks(allBlocks: NodeListOf<Element>): Set<Element> {
  *
  * @sideeffect {@link extractedBlocks} 배열을 초기화하고 추출된 요소 참조로 채운다.
  */
-export function extractTextNodes(): string[] {
+export function extractTranslatableContents(): string[] {
   extractedBlocks = [];
   const texts: string[] = [];
 
@@ -143,10 +143,10 @@ export function extractTextNodes(): string[] {
 /**
  * 가장 최근에 추출된 블록 요소 참조 배열을 반환한다.
  *
- * {@link extractTextNodes} 호출 시 저장된 요소 참조를 반환하며,
+ * {@link extractTranslatableContents} 호출 시 저장된 요소 참조를 반환하며,
  * 번역된 HTML로 DOM을 교체할 때 사용된다.
  *
- * @returns 추출된 Element 배열. {@link extractTextNodes}가 호출되지 않았으면 빈 배열.
+ * @returns 추출된 Element 배열. {@link extractTranslatableContents}가 호출되지 않았으면 빈 배열.
  */
 export function getExtractedBlocks(): Element[] {
   return extractedBlocks;
