@@ -22,9 +22,11 @@
 src/
 ├── background/              # Service Worker
 │   ├── index.ts             # 진입점, 메시지 리스너
-│   ├── translator.ts        # Translator API 래퍼
+│   ├── translator.ts        # Translator API 래퍼 (플레이스홀더 통합)
 │   ├── languageDetector.ts  # LanguageDetector API 래퍼
-│   └── messageHandler.ts    # 메시지 처리 로직
+│   ├── messageHandler.ts    # 메시지 처리 로직
+│   └── placeholder/         # 번역 전후처리 (태그 보호)
+│       └── codePlaceholder.ts
 ├── content/                 # Content Script
 │   ├── index.ts             # 진입점, 메시지 리스너
 │   ├── domExtractor.ts      # DOM 블록 추출 (innerHTML)
@@ -100,6 +102,7 @@ pnpm style      # Prettier 포맷팅
 ## 참고 문서
 
 - **BUILD.md**: 빌드 시스템 상세 (Webpack, TypeScript, pnpm 설정)
+- **PLACEHOLDER.md**: 플레이스홀더 시스템 (번역 시 태그 보호)
 - **ai/CHROME_LANGUAGE_DETECTOR_API.md**: Chrome LanguageDetector API 레퍼런스
 - **ai/CHROME_TRANSLATOR_API.md**: Chrome Translator API 레퍼런스
 - **plan/PLAN_0.md**: MVP 구현 계획
