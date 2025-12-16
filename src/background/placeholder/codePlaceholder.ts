@@ -1,8 +1,22 @@
 // <code>...</code> 또는 <code class="...">...</code> 매칭
 const CODE_PATTERN = /<code(?:\s[^>]*)?>[\s\S]*?<\/code>/gi;
 
-// afterTranslate용 플레이스홀더 매칭
-const PLACEHOLDER_PATTERN = /<code_(\d+)>/gi;
+// afterTranslate용 플레이스홀더 매칭: <1:content> 형식
+// 힌트가 번역되어도 인덱스로 복구 가능
+const PLACEHOLDER_PATTERN = /<(\d+):[^>]*>/gi;
+
+/**
+ * code 태그에서 내용(innerText)만 추출
+ *
+ * @param codeTag - 전체 code 태그 문자열 (예: <code class="foo">npm install</code>)
+ * @returns code 태그 내부 내용 (예: npm install)
+ */
+function extractCodeContent(codeTag: string): string {
+  // <code...> 여는 태그 제거
+  const withoutOpenTag = codeTag.replace(/<code(?:\s[^>]*)?>/i, "");
+  // </code> 닫는 태그 제거
+  return withoutOpenTag.replace(/<\/code>/i, "");
+}
 
 /**
  * 번역 전처리: code 태그를 플레이스홀더로 치환
@@ -18,7 +32,8 @@ export function beforeTranslate(text: string): {
 
   const processedText = text.replace(CODE_PATTERN, (match) => {
     originals.push(match);
-    return `<code_${originals.length}>`; // 1부터 시작
+    const content = extractCodeContent(match);
+    return `<${originals.length}:${content}>`; // 1부터 시작, 힌트 포함
   });
 
   return { processedText, originals };
