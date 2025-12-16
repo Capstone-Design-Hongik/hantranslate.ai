@@ -18,3 +18,6 @@ package-lock.json
 
 # ETC
 .serena
+ISSUE.md
+pr_body.md
+CONTEXT.md
