@@ -6,6 +6,33 @@
 
 **HanTranslate.ai**는 Chrome Built-in AI(Translator API, LanguageDetector API)를 활용한 한국어 번역 Chrome 익스텐션입니다.
 
+## 작업 방식
+
+### 작업 시작 전 설정
+
+> **필수**: 작업 세션 시작 시 `CONTEXT.md` 파일 존재 여부를 확인하세요.
+
+#### A. CONTEXT.md가 존재하는 경우
+
+1. `CONTEXT.md` 파일을 읽어 요구사항, 구현 계획, 이전 세션 기록 등을 파악
+2. 마지막 세션 번호 + 1로 새 세션 번호를 설정. **이 번호를 기억하세요.**
+3.`CONTEXT.md`에 새 세션 섹션을 추가하고 작업을 진행
+
+#### B. CONTEXT.md가 존재하지 않는 경우
+
+1. `create-issue` 서브에이전트 호출 → `ISSUE.md` 생성
+2. `create-context` 서브에이전트 호출 → `CONTEXT.md` 생성
+3. 구현 계획 수립 → 사용자 승인 → `CONTEXT.md` 업데이트 → 구현 작업 수행
+
+> **필수**: 현재 세션 번호를 기억하세요.
+
+### 작업 진행상황 기록
+
+> **필수**: 각 작업 단위가 완료될 때마다 `CONTEXT.md`의 현재 번호 세션 기록에 진행상황을 업데이트합니다.
+
+- 주요 작업 완료 시점마다, 대화에서 논의한 내용 및 작업한 내용을 기록
+- 어떤 과정을 통해 진행되었는지 알 수 있도록 충분한 정보 제공 (ex: 발생한 문제, 대화 내용, 변경사항 등)
+
 ## 기술 스택
 
 - **Runtime**: Chrome Extension Manifest V3
