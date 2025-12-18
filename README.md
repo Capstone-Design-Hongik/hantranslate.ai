@@ -1,3 +1,5 @@
+# 이 레포지터리는 더 이상 유지보수되지 않습니다. 익스텐션을 다운로드하려면 [원본 레포지터리](https://github.com/uwoobeat/hantranslate.ai)를 참고하세요.
+
 # hantranslate.ai
 
 Chrome Built-in AI(Translator API, LanguageDetector API)를 활용한 한국어 번역 Chrome 익스텐션입니다.
