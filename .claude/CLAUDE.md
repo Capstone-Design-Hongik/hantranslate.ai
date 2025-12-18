@@ -129,6 +129,7 @@ pnpm style      # Prettier 포맷팅
 ## 참고 문서
 
 - **BUILD.md**: 빌드 시스템 상세 (Webpack, TypeScript, pnpm 설정)
+- **DEPLOY.md**: 릴리즈 자동화 (release-please, GitHub Actions, 아티팩트)
 - **PLACEHOLDER.md**: 플레이스홀더 시스템 (번역 시 태그 보호)
 - **ai/CHROME_LANGUAGE_DETECTOR_API.md**: Chrome LanguageDetector API 레퍼런스
 - **ai/CHROME_TRANSLATOR_API.md**: Chrome Translator API 레퍼런스
